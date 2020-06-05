@@ -11,7 +11,7 @@
 
 
 
-
+hs.logger.defaultLogLevel='debug'
 
 ----------------------------------------------------------------------------------------------------
 hs.hotkey.alertDuration = 0
@@ -82,8 +82,57 @@ if string.len(hswhints_keys[2]) > 0 then
 end
 
 
+hs.hotkey.bind(
+    {'ctrl', 'alt', 'cmd'}, ".",
+  function()
+    hs.alert.show(string.format("App path:        %s\nApp name:      %s\nIM source id:  %s",
+                                hs.window.focusedWindow():application():path(),
+                                hs.window.focusedWindow():application():name(),
+                                hs.keycodes.currentSourceID()))
+end)
+
 ----------------------------------------------------------------------------------------------------
 --------------------------------------- appM 快速打开应用 ---------------------------------------------
+
+function toggle_application(_app)
+    local app = hs.appfinder.appFromName(_app)
+    if not app then
+        hs.application.launchOrFocus(_app)
+        return
+    end
+    local mainwin = app:mainWindow()
+    if mainwin then
+        if mainwin == hs.window.focusedWindow() then
+            mainwin:application():hide()
+        else
+            mainwin:application():activate(true)
+            mainwin:application():unhide()
+            mainwin:focus()
+        end
+    end
+end
+
+function define_hotkey(prefix, app_list) 
+    for _, v in ipairs(app_list) do
+        local located_name = hs.application.nameForBundleID(v.id)
+        hs.hotkey.bind(prefix, v.key , located_name, function()
+            -- hs.application.launchOrFocus('iTerm')
+            toggle_application(located_name)
+        end)
+    end
+end
+
+-- get app id => mdls -name kMDItemCFBundleIdentifier -r /Applications/IntelliJ\ IDEA.app
+local app_list_cmd = {
+    {key = '1', id='org.gnu.Emacs'},
+    {key = '2', id='com.readdle.PDFExpert-Mac'},
+    {key = '3', id='com.microsoft.VSCode'},
+    {key = '4', id='com.jetbrains.intellij'},
+}
+
+define_hotkey({'cmd'}, app_list_cmd)
+
+-- Toggle an application between being the frontmost app, and being hidden
 -- appM 模式 快速打开应用
 spoon.ModalMgr:new("appM")
 local cmodal = spoon.ModalMgr.modal_list["appM"]

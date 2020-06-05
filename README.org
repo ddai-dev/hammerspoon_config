@@ -1,3 +1,4 @@
 * hs core + hs plugin
 * ref 
 - https://sspai.com/post/53992
+- https://github.com/007sair/hammerspoon
