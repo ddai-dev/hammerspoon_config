@@ -10,9 +10,47 @@ local fnutils = require "hs.fnutils"
 local geometry = require "hs.geometry"
 local mouse = require "hs.mouse"
 
+-- hyper key
+local hyper = {"cmd", "ctrl", "alt"}
+local hyperCmd = {'cmd'}
+local hyperShift = {"alt", "shift"}
+local hyperCtrl = {"alt", "ctrl"}
+local hyperAlt = {"ctrl", "alt", "shift"}
+
 ----------------------------------------------------------------------------------------------------
 -- function define
 ----------------------------------------------------------------------------------------------------
+--Predicate that checks if a window belongs to a screen
+function isInScreen(screen, win)
+    return win:screen() == screen
+end
+
+-- todo 
+function nextScreen(win)
+    local screen = hs.mouse.getCurrentScreen()    
+    if not isInScreen(screen, win) then 
+       screen:next()
+    end
+end
+
+-- call after focusedWindow else do nothing
+function setMouseToMid() 
+    local win = window.focusedWindow()
+    if not win then
+        return 
+    end
+
+    local screen = hs.mouse.getCurrentScreen()    
+    if not isInScreen(screen, win) then 
+        local rect = win:frame()
+        -- local pt = {x=rect.x/2, y=rect.y/2}
+        local center = hs.geometry.rectMidPoint(rect)
+        hs.mouse.setAbsolutePosition(center)
+        mouse.setAbsolutePosition(pt)
+    end
+
+end
+
 function toggle_application(bundleID)
     local app = hs.application.get(bundleID)
     if not app then
@@ -27,6 +65,8 @@ function toggle_application(bundleID)
             mainwin:application():activate(true)
             mainwin:application():unhide()
             mainwin:focus()
+            -- must call after focus
+            setMouseToMid()
         end
     end
 end
@@ -52,6 +92,15 @@ if string.len(hswhints_keys[2]) > 0 then
     end)
 end
 
+-- move cursor to other screen's center
+hs.hotkey.bind(hyper, '.', function()
+    local screen = hs.mouse.getCurrentScreen()
+    local nextScreen = screen:next()
+    local rect = nextScreen:fullFrame()
+    local center = hs.geometry.rectMidPoint(rect)
+    hs.mouse.setAbsolutePosition(center)
+end)
+
 ----------------------------------------------------------------------------------------------------
 -- get app id => mdls -name kMDItemCFBundleIdentifier -r /Applications/IntelliJ\ IDEA.app
 -- define  shortcut --------> cmd
@@ -62,8 +111,9 @@ local app_list_cmd = {
     {key = '2', id='com.readdle.PDFExpert-Mac'},
     {key = '3', id='com.microsoft.VSCode'},
     {key = '4', id='com.jetbrains.intellij'},
+    {key = 'space', id='com.googlecode.iterm2'},
 }
-define_hotkey({'cmd'}, app_list_cmd)
+define_hotkey(hyperCmd, app_list_cmd)
 
 
 --------------------------------------- appM 快速打开应用 ---------------------------------------------
