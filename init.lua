@@ -12,6 +12,18 @@
 
 
 hs.logger.defaultLogLevel='debug'
+-- window management
+local application = require "hs.application"
+local hotkey = require "hs.hotkey"
+local window = require "hs.window"
+local layout = require "hs.layout"
+local grid = require "hs.grid"
+local hints = require "hs.hints"
+local screen = require "hs.screen"
+local alert = require "hs.alert"
+local fnutils = require "hs.fnutils"
+local geometry = require "hs.geometry"
+local mouse = require "hs.mouse"
 
 ----------------------------------------------------------------------------------------------------
 hs.hotkey.alertDuration = 0
@@ -81,7 +93,6 @@ if string.len(hswhints_keys[2]) > 0 then
     end)
 end
 
-
 hs.hotkey.bind(
     {'ctrl', 'alt', 'cmd'}, ".",
   function()
@@ -91,13 +102,12 @@ hs.hotkey.bind(
                                 hs.keycodes.currentSourceID()))
 end)
 
-----------------------------------------------------------------------------------------------------
 --------------------------------------- appM 快速打开应用 ---------------------------------------------
-
-function toggle_application(_app)
-    local app = hs.appfinder.appFromName(_app)
+function toggle_application(bundleID)
+    -- local app = hs.appfinder.appFromName(_app)
+    local app = hs.application.get(bundleID)
     if not app then
-        hs.application.launchOrFocus(_app)
+        hs.application.launchOrFocusByBundleID(bundleID)
         return
     end
     local mainwin = app:mainWindow()
@@ -114,16 +124,17 @@ end
 
 function define_hotkey(prefix, app_list) 
     for _, v in ipairs(app_list) do
-        local located_name = hs.application.nameForBundleID(v.id)
-        hs.hotkey.bind(prefix, v.key , located_name, function()
+        -- local located_name = hs.application.nameForBundleID(v.id)
+        hs.hotkey.bind(prefix, v.key , v.id, function()
             -- hs.application.launchOrFocus('iTerm')
-            toggle_application(located_name)
+            toggle_application(v.id)
         end)
     end
 end
 
 -- get app id => mdls -name kMDItemCFBundleIdentifier -r /Applications/IntelliJ\ IDEA.app
 local app_list_cmd = {
+    {key = '0', id='com.google.Chrome'},
     {key = '1', id='org.gnu.Emacs'},
     {key = '2', id='com.readdle.PDFExpert-Mac'},
     {key = '3', id='com.microsoft.VSCode'},
