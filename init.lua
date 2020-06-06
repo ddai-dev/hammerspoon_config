@@ -56,6 +56,7 @@ end
 
 require "private/hotkey"
 require "private/window"
+require "private/ime"
 require "private/other"
 
 ----------------------------------------------------------------------------------------------------
