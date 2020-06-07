@@ -40,21 +40,24 @@ function setMouseToMid()
         return 
     end
 
-    local screen = hs.mouse.getCurrentScreen()    
-    if not isInScreen(screen, win) then 
-        local rect = win:frame()
-        -- local pt = {x=rect.x/2, y=rect.y/2}
-        local center = hs.geometry.rectMidPoint(rect)
-        hs.mouse.setAbsolutePosition(center)
-        mouse.setAbsolutePosition(pt)
-    end
+    --  local screen = hs.mouse.getCurrentScreen()    
+    --  if not isInScreen(screen, win) then 
+    --      local rect = win:frame()
+    --      local center = hs.geometry.rectMidPoint(rect)
+    --      hs.mouse.setAbsolutePosition(center)
+    --      mouse.setAbsolutePosition(pt)
+    --  end
 
+    local rect = win:frame()
+    local center = hs.geometry.rectMidPoint(rect)
+    hs.mouse.setAbsolutePosition(center)
 end
 
 function toggle_application(bundleID)
     local app = hs.application.get(bundleID)
     if not app then
         hs.application.launchOrFocusByBundleID(bundleID)
+        setMouseToMid()
         return
     end
     local mainwin = app:mainWindow()
