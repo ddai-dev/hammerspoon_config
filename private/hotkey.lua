@@ -140,12 +140,14 @@ for _, v in ipairs(hsapp_list) do
         if located_name then
             cmodal:bind('', v.key, located_name, function()
                 hs.application.launchOrFocusByBundleID(v.id)
+                setMouseToMid()
                 spoon.ModalMgr:deactivate({"appM"})
             end)
         end
     elseif v.name then
         cmodal:bind('', v.key, v.name, function()
             hs.application.launchOrFocus(v.name)
+            setMouseToMid()
             spoon.ModalMgr:deactivate({"appM"})
         end)
     end
