@@ -25,23 +25,23 @@ function isInScreen(screen, win)
     return win:screen() == screen
 end
 
--- todo 
+-- todo
 function nextScreen(win)
-    local screen = hs.mouse.getCurrentScreen()    
-    if not isInScreen(screen, win) then 
+    local screen = hs.mouse.getCurrentScreen()
+    if not isInScreen(screen, win) then
        screen:next()
     end
 end
 
 -- call after focusedWindow else do nothing
-function setMouseToMid() 
+function setMouseToMid()
     local win = window.focusedWindow()
     if not win then
-        return 
+        return
     end
 
-    --  local screen = hs.mouse.getCurrentScreen()    
-    --  if not isInScreen(screen, win) then 
+    --  local screen = hs.mouse.getCurrentScreen()
+    --  if not isInScreen(screen, win) then
     --      local rect = win:frame()
     --      local center = hs.geometry.rectMidPoint(rect)
     --      hs.mouse.setAbsolutePosition(center)
@@ -74,7 +74,7 @@ function toggle_application(bundleID)
     end
 end
 
-function define_hotkey(prefix, app_list) 
+function define_hotkey(prefix, app_list)
     for _, v in ipairs(app_list) do
         -- local located_name = hs.application.nameForBundleID(v.id)
         hs.hotkey.bind(prefix, v.key , v.id, function()

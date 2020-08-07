@@ -7,7 +7,7 @@ local function English()
     hs.keycodes.currentSourceID("com.sogou.inputmethod.sogou.pinyin")
 end
 
--- app to expected ime config 
+-- app to expected ime config
 -- todo only set to pinyin swtich with SHIFT key for now
 local app2Ime = {
     {'/Applications/iTerm.app', 'English'},
@@ -16,6 +16,8 @@ local app2Ime = {
     {'/Applications/Visual Studio Code.app', 'English'},
     {'/System/Library/CoreServices/Finder.app', 'English'},
     {'/Applications/WeChat.app', 'Chinese'},
+    {'/Applications/1Password 7.app', 'Chinese'},
+    {'/Applications/Safari.app', 'Chinese'},
     {'/Applications/System Preferences.app', 'English'},
 }
 
