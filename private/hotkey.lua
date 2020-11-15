@@ -114,6 +114,7 @@ local app_list_cmd = {
     {key = '2', id='com.readdle.PDFExpert-Mac'},
     {key = '3', id='com.microsoft.VSCode'},
     {key = '4', id='com.jetbrains.intellij'},
+    {key = '5', id='com.jetbrains.CLion'},
     {key = 'space', id='com.googlecode.iterm2'},
 }
 define_hotkey(hyperCmd, app_list_cmd)
